@@ -1,83 +1,86 @@
-var gulp = require('gulp');
-var browserSync = require('browser-sync');
-var sass = require('gulp-sass');
-var plumber = require('gulp-plumber');
-var csscomb = require('gulp-csscomb');
-var notify = require('gulp-notify');
-var autoprefixer = require('gulp-autoprefixer');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var watch = require('gulp-watch');
-var changed = require('gulp-changed');
-var cache = require('gulp-cached');
+const gulp = require('gulp');
 
-var destDir = '/';
-var assetsDir = 'common/';
+//js
+const riot = require('gulp-riot');
+const webpackStream = require("webpack-stream");
+const webpack = require("webpack");
+const webpackConfig = require('./webpack.config.js');
 
-gulp.task('browser-sync', function () {
-	browserSync({
-		server: {
-			baseDir: destDir
-		}
-	});
+//sass
+const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
+
+//etc
+const browserSync = require('browser-sync');
+const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
+const cache = require('gulp-cached');
+const watch = require('gulp-watch');
+
+//directory
+const sourceDir = 'src/';
+const distDir = 'dist/';
+const assetsDir = 'assets/';
+
+//browser-sync
+gulp.task('browser-sync', () => {
+  browserSync({
+    server: {
+      baseDir: distDir
+    }
+  });
 });
-gulp.task('sass', function () {
-	return gulp.src(['source/' + assetsDir + 'sass/**/*.scss'])
-		.pipe(plumber({
-			errorHandler: notify.onError('Error: <%= error.message %>')
-		}))
-		.pipe(sass())
-		.pipe(autoprefixer({
-			browsers: ['last 2 versions', 'Android 3', 'ie 9']
-		}))
-		.pipe(csscomb())
-		.pipe(gulp.dest('source/' + assetsDir + 'css/'))
+
+
+//webpack
+gulp.task('webpack', () => {
+  return gulp.src('src/tag.js')
+    .pipe(plumber({
+      errorHandler: notify.onError('Error: <%= error.message %>')
+    }))
+    .pipe(webpackStream(webpackConfig, webpack))
+    .pipe(gulp.dest(distDir))
+    .pipe(browserSync.stream())
 });
-gulp.task('css', function () {
-	return gulp.src('source/**/*.css')
-		.pipe(cache('css-cache'))
-		.pipe(gulp.dest(destDir))
-		.pipe(browserSync.stream())
+
+//sass
+gulp.task('sass', () => {
+  return gulp.src([sourceDir + assetsDir + 'sass/**/*.scss'])
+    .pipe(plumber({
+      errorHandler: notify.onError('Error: <%= error.message %>')
+    }))
+    .pipe(sass())
+    .pipe(autoprefixer({
+    browsers: ['last 2 versions', 'Android 4', 'ie 9']
+  }))
+    .pipe(gulp.dest(sourceDir + assetsDir + 'css/'))
 });
-gulp.task('jsmin', function () {
-	gulp.src(['source/' + assetsDir + 'js/**/*.js',
-    '!source/' + assetsDir + 'js/**/*.min.js'])
-		.pipe(plumber())
-		.pipe(changed(destDir + assetsDir + 'js/'))
-		.pipe(uglify({
-			preserveComments: 'some'
-		}))
-		.pipe(rename({
-			suffix: '.min'
-		}))
-		.pipe(gulp.dest('source/' + assetsDir + 'js/'))
+gulp.task('css', () => {
+  return gulp.src(sourceDir + '**/*.css')
+    .pipe(cache('css-cache'))
+    .pipe(gulp.dest(distDir))
+    .pipe(browserSync.stream())
 });
-gulp.task('js', function () {
-	return gulp.src('source/**/*.js')
-		.pipe(cache('js-cache'))
-		.pipe(gulp.dest(destDir))
-		.pipe(browserSync.stream())
+
+//copy
+gulp.task('copy', function () {
+  return gulp.src([sourceDir + '**/*'])
+    .pipe(gulp.dest(distDir))
+    .pipe(browserSync.stream())
 });
-gulp.task('copysource', function () {
-	return gulp.src(['source/**/*', '!source/' + assetsDir + 'sass/', '!source/' + assetsDir + 'sass/*.scss'])
-		.pipe(cache('source-cache'))
-		.pipe(gulp.dest(destDir))
-		.pipe(browserSync.stream())
-});
-gulp.task('default', ['browser-sync', 'copysource', 'sass', 'jsmin'], function () {
-	watch(['source/**/*.+(jpg|jpeg|gif|png|html|php)'], function (event) {
-		gulp.start(['copysource']);
-	});
-	watch(['source/**/*.scss'], function (event) {
-		gulp.start(['sass']);
-	});
-	watch(['source/**/*.css'], function (event) {
-		gulp.start(['css']);
-	});
-	watch(['source/**/*.js'], function (event) {
-		gulp.start(['jsmin']);
-	});
-	watch(['source/**/*.min.js'], function (event) {
-		gulp.start(['js']);
-	});
+
+//watch
+gulp.task('default', ['browser-sync','copy', 'webpack', 'sass'], () => {
+  watch([sourceDir + '**/*.+(jpg|jpeg|gif|png|html|php|tag)'], () => {
+    gulp.start(['copy']);
+  });
+  watch([sourceDir + '**/*.tag', sourceDir + 'tag.js'], () => {
+    gulp.start(['webpack']);
+  });
+  watch([sourceDir + '**/*.scss'], () => {
+    gulp.start(['sass']);
+  });
+  watch([sourceDir + '**/*.css'], () => {
+    gulp.start(['css']);
+  });
 });
