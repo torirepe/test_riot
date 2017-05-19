@@ -63,7 +63,7 @@ gulp.task('css', () => {
 });
 
 //copy
-gulp.task('copy', function () {
+gulp.task('copy', () => {
   return gulp.src([sourceDir + '**/*'])
     .pipe(gulp.dest(distDir))
     .pipe(browserSync.stream())

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "/Applications/MAMP/htdocs/git/test_riot/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2865,22 +2865,70 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 var riot = __webpack_require__(0);
-riot.tag2('app', '<h1>{opts.title}</h1>', '', '', function (opts) {});
+riot.tag2('nopage', '<h2>404</h2>', '', '', function (opts) {});
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+var riot = __webpack_require__(0);
+riot.tag2('about', '<h2>about</h2>', '', '', function (opts) {});
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var riot = __webpack_require__(0);
+riot.tag2('concept', '<h2>concept</h2>', '', '', function (opts) {});
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var riot = __webpack_require__(0);
+riot.tag2('index', '<h2>index</h2>', '', '', function (opts) {});
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(riot) {
 
+__webpack_require__(4);
+__webpack_require__(2);
+__webpack_require__(3);
 __webpack_require__(1);
 
-route(function (url) {
+/*route((url) => {
+  url = url || 'index';
   console.log(url);
+  riot.mount('content', url, { title: url });
+})*/
+
+route('/', function () {
+  riot.mount('contents', 'index');
 });
-route.start();
-riot.mount('app', { title: 'hogehoge' });
+route('/about', function () {
+  riot.mount('contents', 'about');
+});
+route('/concept', function () {
+  riot.mount('contents', 'concept');
+});
+route('/*', function () {
+  riot.mount('contents', 'nopage');
+});
+
+route.start(true);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
