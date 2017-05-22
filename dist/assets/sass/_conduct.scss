@@ -1,0 +1,120 @@
+//extensionBox
+#extensionBox {
+  position: relative;
+  transition: all .24s ease;
+  &.active {
+    a:before {
+      transform-origin: center center;
+      transform: rotate(45deg);
+    }
+    a:after {
+      transform-origin: center center;
+      transform: rotate(45deg);
+    }
+  }
+  a {
+    position: relative;
+    transition: all .24s ease;
+    &:before {
+      transition: all .24s ease;
+      content: '';
+      display: block;
+      width: 1px;
+      height: .8em;
+      background-color: $c-black;
+      position: absolute;
+      top: 0;
+      right: 5%;
+      font-size: 200%;
+      @include mq(sp) {
+        margin: 3.2% .4em 0 0;
+      }
+      @include mq(tb) {
+        margin: 14px .4em 0 0;
+      }
+      @include mq(pc) {
+        margin: 14px .4em 0 0;
+      }
+    }
+    &:after {
+      transition: all .24s ease;
+      content: '';
+      display: block;
+      width: .8em;
+      height: 1px;
+      background-color: $c-black;
+      position: absolute;
+      top: 0;
+      right: 5%;
+      font-size: 200%;
+      @include mq(sp) {
+        margin-top: 6.8%;
+      }
+      @include mq(tb) {
+        margin-top: 28px;
+      }
+      @include mq(pc) {
+        margin-top: 28px;
+      }
+    }
+    @include mq(pc) {
+      &:hover {
+        background-color: #f4f4f5;
+      }
+    }
+  }
+  p {
+    position: absolute;
+    @include mq(sp) {
+      top: 15vw !important;
+    }
+    @include mq(tb) {
+      top: 58px !important;
+    }
+    @include mq(pc) {
+      top: 58px !important;
+      left: 50%;
+      margin-left: -430px;
+      width: 860px;
+    }
+    width: 100%;
+    opacity: 0;
+    transition: all .24s ease;
+  }
+  &.active {
+    a{
+      width: 100%;
+    }
+    p {
+      display: block;
+      opacity: 1;
+      transition-delay: .24s;
+    }
+  }
+}
+
+//jp en
+body {
+  min-height: 150vh;
+  #language {
+    span {
+      transition: all .36s ease;
+    }
+  }
+  &.en {
+    #language {
+      &:before {
+        color: $c-white;
+      }
+      &:after {
+        color: $c-black;
+      }
+      span {
+        transform: translateX(100%);
+      }
+    }
+  }
+  &.loading #wrapper {
+    opacity: 0;
+  }
+}

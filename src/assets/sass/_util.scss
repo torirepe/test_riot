@@ -1,0 +1,49 @@
+//break point
+$breakpoints: (
+  'sp': 'screen and (max-width: 425px)',
+  'tb': 'screen and (min-width: 426px) and (max-width: 768px)',
+  'pc': 'screen and (min-width: 769px)',
+) !default;
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+//color
+$c-white: #fff;
+$c-black: #221714;
+$c-grey: #949494;
+
+//font
+$f-sans: "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", "游ゴシック", YuGothic, "Meiryo", sans-serif;
+$f-serif: "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", serif;
+$f-crimson: 'Crimson Text', $f-serif;
+
+//tool
+@mixin fzvw($px) {
+  font-size: $px / 640 * 100 + vw;
+}
+@mixin cols($sp, $tb, $pc) {
+  font-size: 0;
+  letter-spacing: 0;
+  li {
+    display: inline-block;
+    vertical-align: top;
+    @include mq(sp) {
+      &:nth-child($sp n+1) {
+        margin-left: 0 !important;
+      }
+    }
+    @include mq(tb) {
+      &:nth-child($tb n+1) {
+        margin-left: 0 !important;
+      }
+    }
+    @include mq(pc) {
+      &:nth-child($sp n+1) {
+        margin-left: 0 !important;
+      }
+    }
+  }
+}

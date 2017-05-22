@@ -2875,7 +2875,7 @@ riot.tag2('nopage', '<h2>404</h2>', '', '', function (opts) {});
 
 
 var riot = __webpack_require__(0);
-riot.tag2('about', '<h2>about</h2>', '', '', function (opts) {});
+riot.tag2('about', '<h2>about</h2> <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>', 'about,[data-is="about"]{ display: block } about h2,[data-is="about"] h2{ font-size: 50px; color: red; } about p,[data-is="about"] p{ margin-top: 500px; }', '', function (opts) {});
 
 /***/ }),
 /* 3 */
@@ -2885,7 +2885,7 @@ riot.tag2('about', '<h2>about</h2>', '', '', function (opts) {});
 
 
 var riot = __webpack_require__(0);
-riot.tag2('concept', '<h2>concept</h2>', '', '', function (opts) {});
+riot.tag2('contact', '<h2>contact</h2>', '', '', function (opts) {});
 
 /***/ }),
 /* 4 */
@@ -2915,17 +2915,19 @@ __webpack_require__(1);
   riot.mount('content', url, { title: url });
 })*/
 
+var contents = "main";
+
 route('/', function () {
-  riot.mount('contents', 'index');
+  riot.mount(contents, 'index');
 });
 route('/about', function () {
-  riot.mount('contents', 'about');
+  riot.mount(contents, 'about');
 });
-route('/concept', function () {
-  riot.mount('contents', 'concept');
+route('/contact', function () {
+  riot.mount(contents, 'contact');
 });
 route('/*', function () {
-  riot.mount('contents', 'nopage');
+  riot.mount(contents, 'nopage');
 });
 
 route.start(true);
